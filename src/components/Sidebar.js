@@ -164,25 +164,62 @@ console.log("angle",angle);
   return angle;
   }
 
+  const getTranslateValues=(element)=>{
+    const style=window.getComputedStyle(element);
+    const matrix=style['transform'] ;
+    console.log(matrix);
+
+    if (matrix === 'none' || typeof matrix === 'undefined') {
+      return {
+        x: 0,
+        y: 0,
+        z: 0
+      }
+    }
+    const matrixType = matrix.includes('3d') ? '3d' : '2d'
+    const matrixValues = matrix.match(/matrix.*\((.+)\)/)[1].split(', ')
+
+    if (matrixType === '2d') {
+      return {
+        x: matrixValues[4],
+        y: matrixValues[5],
+        z: 0
+      }
+    }
+  
+    if (matrixType === '3d') {
+      return {
+        x: matrixValues[12],
+        y: matrixValues[13],
+        z: matrixValues[14]
+      }
+    }
+  }
+
  
   const executeSprite=()=>{
     console.log("in executesprite");
   var flag=false;
   var sprite=false;
+
+
    
   for(let i=0;i<group.length;i++)
   {
     var steps,angle;
     let catSprite=document.getElementById("catSprite");
     
-    
+   const {x,y,z}= getTranslateValues(catSprite);
+  
     let previewAreaPositionX=document.getElementById("previewArea").getBoundingClientRect().x;
    let previewAreaPositionY=document.getElementById("previewArea").getBoundingClientRect().y;
     let catXPosition=catSprite.getBoundingClientRect().x;
     let catYPosition=catSprite.getBoundingClientRect().y;
     var rotation=getRotation(catSprite);
-    let relativePositionX=catXPosition-previewAreaPositionX;
-    let relativePositionY=rotation==0?0:catYPosition-previewAreaPositionY;
+    // let relativePositionX=catXPosition-previewAreaPositionX;
+    // let relativePositionY=rotation==0?0:catYPosition-previewAreaPositionY;
+    let relativePositionX=Number(x);
+    let relativePositionY=rotation==0?0:Number(y);
 
     switch(group[i].id)
     {
@@ -197,10 +234,11 @@ console.log("angle",angle);
           case "move10":
             steps=10;
           if(flag){
-         
+            
                 let xx=steps*Math.cos(rotation);
                 let yy=steps*Math.sin(rotation);
-                catSprite.style.transform=`translate(${relativePositionX+xx}px,${relativePositionY+yy}px) rotate(${rotation}deg)`;
+                catSprite.style.transform=`rotate(${rotation}deg) translate(${relativePositionX+xx}px,${relativePositionY+yy}px) `;
+                catSprite.style.position="absolute";
           }
             break;
 
@@ -209,8 +247,8 @@ console.log("angle",angle);
               if(flag)
               {
             if(steps!=10){relativePositionX=0,relativePositionY=0}
-              catSprite.style.transform=`rotate(${rotation+angle}deg) translate(${relativePositionX}px,${relativePositionY}px)`
-            //  catSprite.style.position="absolute";
+              catSprite.style.transform=` translate(${relativePositionX}px,${relativePositionY}px) rotate(${rotation+angle}deg)`
+              catSprite.style.position="absolute";
               }
               break;
 
@@ -220,10 +258,11 @@ console.log("angle",angle);
                 {
 
             if(steps!=10){relativePositionX=0,relativePositionY=0}
-                catSprite.style.transform=`rotate(${rotation+angle}deg) translate(${relativePositionX}px,${relativePositionY}px)`
-             //   catSprite.style.position="absolute";
+                catSprite.style.transform=`translate(${relativePositionX}px,${relativePositionY}px) rotate(${rotation+angle}deg) `
+                catSprite.style.position="absolute";
                 }
                 break;
+                
     }
   }
   }
