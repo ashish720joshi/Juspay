@@ -1,6 +1,5 @@
-import React,{useState,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import Icon from "./Icon";
-
 
 export default function Sidebar() {
 
@@ -8,15 +7,13 @@ export default function Sidebar() {
   const [offSetX, setOffSetX] = useState(0);
   const [offSetY, setOffSetY] = useState(0);
   const [count, setcount] = useState(0);
-  const [clone,setClone]=useState(null);
+  const [clone, setClone] = useState(null);
   const [selectedElement, setselectedElement] = useState();
   const [ifMerge, setifMerge] = useState(null);
   const [actions, setactions] = useState([]);
-   const [group, setgroup] = useState([]);
+  const [group, setgroup] = useState([]);
 
-
-
- // var selectedElement;
+  // var selectedElement;
   // useEffect(() => {
   //   console.log("selectedElementinusefe",selectedElement);
   //   console.log("console",selectedElement!=null);
@@ -26,109 +23,101 @@ export default function Sidebar() {
   //   setifMerge(false);
   // }, [selectedElement])
 
-
   // useEffect(() => {
-    
-  
+
   // }, [ifMerge])
 
-useEffect(() => {
-  let element=document.getElementById("catSprite");
-  element.addEventListener("click",executeSprite)
+  useEffect(() => {
+    let element = document.getElementById("catSprite");
+    element.addEventListener("click", executeSprite);
+  }, []);
 
-}, [])
-
-  const add=(e)=>{
-
+  const add = (e) => {
     console.log("add");
-    
-    var ele=e.target.cloneNode(true);
+
+    var ele = e.target.cloneNode(true);
     setClone(ele);
     // setcount(count+1);
     // ele.setAttribute("id",`${e.target.id} ${count}`);
- //   console.log("left",e.clientX);
+    //   console.log("left",e.clientX);
     //clone's current position with respect to cursor
-    setOffSetX(e.clientX-e.target.getBoundingClientRect().left);
-    setOffSetY(e.clientY-e.target.getBoundingClientRect().top);
-  }
+    setOffSetX(e.clientX - e.target.getBoundingClientRect().left);
+    setOffSetY(e.clientY - e.target.getBoundingClientRect().top);
+  };
 
-  const dragStart=(e)=>{
-    var ele=e.target;
+  const dragStart = (e) => {
+    var ele = e.target;
     setselectedElement(ele);
-   // selectedElement=ele;
-    console.log("in drag start",selectedElement);
-    setOffSetX(e.clientX-ele.getBoundingClientRect().left);
-    setOffSetY(e.clientY-ele.getBoundingClientRect().top);
-    console.log("ifMerge123",ifMerge)
-  }
+    // selectedElement=ele;
+    console.log("in drag start", selectedElement);
+    setOffSetX(e.clientX - ele.getBoundingClientRect().left);
+    setOffSetY(e.clientY - ele.getBoundingClientRect().top);
+    console.log("ifMerge123", ifMerge);
+  };
 
-  const dragEndClone=(e)=>{
-    if(!ifMerge){
-    var ele=e.target;
-    console.log("ifMerge",ifMerge);
-    console.log("in end");
-    ele.style.left=`${e.pageX-offSetX}px`;
-    ele.style.top=`${e.pageY-offSetY}px`;
-    ele.style.position='absolute';
-    //setselectedElement(null);
+  const dragEndClone = (e) => {
+    if (!ifMerge) {
+      var ele = e.target;
+      console.log("ifMerge", ifMerge);
+      console.log("in end");
+      ele.style.left = `${e.pageX - offSetX}px`;
+      ele.style.top = `${e.pageY - offSetY}px`;
+      ele.style.position = "absolute";
+      //setselectedElement(null);
     }
-  }
+  };
 
   //merge div
-  const onDrop=(e)=>{
+  const onDrop = (e) => {
     e.preventDefault();
     console.log("inside ondrop");
     //merging two divs
 
-  //  if(ifMerge){
-  //     var element=e.target;
-  //     var ele=document.getElementById("midarea");
-  //     var newDiv=document.createElement("div");
-  //     ele.appendChild(newDiv);
-  //     newDiv.appendChild(element);
-  //     console.log("selectedEEEEE",selectedElement);
-  //     newDiv.appendChild(selectedElement);
-  //     newDiv.addEventListener("dragstart",dragStart);
-  //     newDiv.addEventListener("dragend",dragEndClone);
-  //    newDiv.addEventListener("dragover",dragOver);
-  //  // element.appendChild(selectedElement);
-  //   console.log("elementttt",element);
+    //  if(ifMerge){
+    //     var element=e.target;
+    //     var ele=document.getElementById("midarea");
+    //     var newDiv=document.createElement("div");
+    //     ele.appendChild(newDiv);
+    //     newDiv.appendChild(element);
+    //     console.log("selectedEEEEE",selectedElement);
+    //     newDiv.appendChild(selectedElement);
+    //     newDiv.addEventListener("dragstart",dragStart);
+    //     newDiv.addEventListener("dragend",dragEndClone);
+    //    newDiv.addEventListener("dragover",dragOver);
+    //  // element.appendChild(selectedElement);
+    //   console.log("elementttt",element);
 
-  //   }
-    var element=e.target;
-  console.log("dragoerelemnt",element.offsetWidth);
- if(selectedElement!=null){
-    console.log("inside selectedelement not null")
-  selectedElement.style.left=`${element.getBoundingClientRect().left}px`;
-  selectedElement.style.position="absolute";
-  selectedElement.style.top=`${element.getBoundingClientRect().bottom}px`;
-  setifMerge(true);
-  }
-
-
-
-  }
-  const allowDrop=(e)=>{
+    //   }
+    var element = e.target;
+    console.log("dragoerelemnt", element.offsetWidth);
+    if (selectedElement != null) {
+      console.log("inside selectedelement not null");
+      selectedElement.style.left = `${element.getBoundingClientRect().left}px`;
+      selectedElement.style.position = "absolute";
+      selectedElement.style.top = `${element.getBoundingClientRect().bottom}px`;
+      setifMerge(true);
+    }
+  };
+  const allowDrop = (e) => {
     e.preventDefault();
-  }
+  };
 
-  const dragEnd=(e)=>{
- 
-    var ele=document.getElementById("midarea");
+  const dragEnd = (e) => {
+    var ele = document.getElementById("midarea");
     ele.appendChild(clone);
-    
-    clone.style.left=`${e.pageX-offSetX}px`;
-    clone.style.top=`${e.pageY-offSetY}px`;
-    clone.style.position='absolute';
-    clone.addEventListener("dragstart",dragStart);
-    clone.addEventListener("dragend",dragEndClone);
-    clone.addEventListener("click",click);
-    let grp=[...group];
+
+    clone.style.left = `${e.pageX - offSetX}px`;
+    clone.style.top = `${e.pageY - offSetY}px`;
+    clone.style.position = "absolute";
+    clone.addEventListener("dragstart", dragStart);
+    clone.addEventListener("dragend", dragEndClone);
+    clone.addEventListener("click", click);
+    let grp = [...group];
     console.log(grp);
     grp.push({
-      id:clone.id,
-      element:clone
-    })
+      id: clone.id,
+      element: clone
+    });
     setgroup(grp);
     console.log(clone.id);
     //clone.addEventListener("dragover",allowDrop) ;
@@ -170,29 +159,28 @@ console.log("angle",angle);
     const matrix=style['transform'] ;
   //  console.log(matrix);
 
-    if (matrix === 'none' || typeof matrix === 'undefined') {
+    if (matrix === "none" || typeof matrix === "undefined") {
       return {
         x: 0,
         y: 0,
         z: 0
-      }
+      };
     }
-    const matrixType = matrix.includes('3d') ? '3d' : '2d'
-    const matrixValues = matrix.match(/matrix.*\((.+)\)/)[1].split(', ')
+    const matrixType = matrix.includes("3d") ? "3d" : "2d";
+    const matrixValues = matrix.match(/matrix.*\((.+)\)/)[1].split(", ");
 
-    if (matrixType === '2d') {
+    if (matrixType === "2d") {
       return {
         x: matrixValues[4],
         y: matrixValues[5],
         z: 0
-      }
+      };
     }
   
    
   }
 
- 
-  const executeSprite=()=>{
+  const executeSprite = () => {
     console.log("in executesprite");
   var flag=false;
   var sprite=false;
@@ -214,7 +202,7 @@ console.log("angle",angle);
         break;
 
         case "sprite":
-          sprite=true;
+          sprite = true;
           break;
 
           case "move10":
@@ -265,63 +253,67 @@ console.log("angle",angle);
  
   }
 
-
-
-
   return (
-    <div className="w-60 flex-none h-full overflow-y-auto flex flex-col items-start p-2 border-r border-gray-200"
-    >
+    <div className="w-60 flex-none h-full overflow-y-auto flex flex-col items-start p-2 border-r border-gray-200">
       <div className="font-bold"> {"Events"} </div>
-      <div id="flagevent" className="flex flex-row flex-wrap bg-yellow-500 text-white px-2 py-1 my-2 text-sm cursor-pointer"
-     draggable={true}
-     onDragStart={add}
-     onDragEnd={dragEnd}
-
+      <div
+        id="flagevent"
+        className="flex flex-row flex-wrap bg-yellow-500 text-white px-2 py-1 my-2 text-sm cursor-pointer"
+        draggable={true}
+        onDragStart={add}
+        onDragEnd={dragEnd}
       >
         {"When "}
         <Icon name="flag" size={15} className="text-green-600 mx-2" />
         {"clicked"}
-
       </div>
-      <div id="sprite" className="flex flex-row flex-wrap bg-yellow-500 text-white px-2 py-1 my-2 text-sm cursor-pointer" 
-       draggable={true}
-       onDragStart={add}
-       onDragEnd={dragEnd}
-       >
+      <div
+        id="sprite"
+        className="flex flex-row flex-wrap bg-yellow-500 text-white px-2 py-1 my-2 text-sm cursor-pointer"
+        draggable={true}
+        onDragStart={add}
+        onDragEnd={dragEnd}
+      >
         {"When this sprite clicked"}
       </div>
       <div className="font-bold"> {"Motion"} </div>
-      <div id="move10" className="flex flex-row flex-wrap bg-blue-500 text-white px-2 py-1 my-2 text-sm cursor-pointer"
-       draggable={true}
-       onDragStart={add}
-       onDragEnd={dragEnd}
-       >
+      <div
+        id="move10"
+        className="flex flex-row flex-wrap bg-blue-500 text-white px-2 py-1 my-2 text-sm cursor-pointer"
+        draggable={true}
+        onDragStart={add}
+        onDragEnd={dragEnd}
+      >
         {"Move 10 steps"}
       </div>
-      <div id="turn15ACW" className="flex flex-row flex-wrap bg-blue-500 text-white px-2 py-1 my-2 text-sm cursor-pointer"
-       draggable={true}
-       onDragStart={add}
-       onDragEnd={dragEnd}
+      <div
+        id="turn15ACW"
+        className="flex flex-row flex-wrap bg-blue-500 text-white px-2 py-1 my-2 text-sm cursor-pointer"
+        draggable={true}
+        onDragStart={add}
+        onDragEnd={dragEnd}
       >
         {"Turn "}
         <Icon name="undo" size={15} className="text-white mx-2" />
         {"15 degrees"}
       </div>
-      <div id="turn15CW" className="flex flex-row flex-wrap bg-blue-500 text-white px-2 py-1 my-2 text-sm cursor-pointer"
-      draggable={true}
-      onDragStart={add}
-      onDragEnd={dragEnd}
+      <div
+        id="turn15CW"
+        className="flex flex-row flex-wrap bg-blue-500 text-white px-2 py-1 my-2 text-sm cursor-pointer"
+        draggable={true}
+        onDragStart={add}
+        onDragEnd={dragEnd}
       >
         {"Turn "}
         <Icon name="redo" size={15} className="text-white mx-2" />
         {"15 degrees"}
       </div>
 
-<br/><br/><br/>
+      <br />
+      <br />
+      <br />
       <div onClick={executeSprite}>
-      
-      <Icon name="flag" size={50} className="text-green-600 mx-2"
-       />
+        <Icon name="flag" size={50} className="text-green-600 mx-2" />
       </div>
     </div>
   );
