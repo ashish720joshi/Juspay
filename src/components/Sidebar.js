@@ -4,6 +4,7 @@ import Icon from "./Icon";
 
 export default function Sidebar() {
 
+
   const [offSetX, setOffSetX] = useState(0);
   const [offSetY, setOffSetY] = useState(0);
   const [count, setcount] = useState(0);
@@ -167,7 +168,7 @@ console.log("angle",angle);
   const getTranslateValues=(element)=>{
     const style=window.getComputedStyle(element);
     const matrix=style['transform'] ;
-    console.log(matrix);
+  //  console.log(matrix);
 
     if (matrix === 'none' || typeof matrix === 'undefined') {
       return {
@@ -187,13 +188,7 @@ console.log("angle",angle);
       }
     }
   
-    if (matrixType === '3d') {
-      return {
-        x: matrixValues[12],
-        y: matrixValues[13],
-        z: matrixValues[14]
-      }
-    }
+   
   }
 
  
@@ -202,24 +197,15 @@ console.log("angle",angle);
   var flag=false;
   var sprite=false;
 
-
+  var {x,y,z}= getTranslateValues(catSprite);
+  var rotation=getRotation(catSprite);
    
   for(let i=0;i<group.length;i++)
   {
     var steps,angle;
     let catSprite=document.getElementById("catSprite");
-    
-   const {x,y,z}= getTranslateValues(catSprite);
-  
-    let previewAreaPositionX=document.getElementById("previewArea").getBoundingClientRect().x;
-   let previewAreaPositionY=document.getElementById("previewArea").getBoundingClientRect().y;
-    let catXPosition=catSprite.getBoundingClientRect().x;
-    let catYPosition=catSprite.getBoundingClientRect().y;
-    var rotation=getRotation(catSprite);
-    // let relativePositionX=catXPosition-previewAreaPositionX;
-    // let relativePositionY=rotation==0?0:catYPosition-previewAreaPositionY;
-    let relativePositionX=Number(x);
-    let relativePositionY=rotation==0?0:Number(y);
+    x=Number(x);
+    y=Number(y);
 
     switch(group[i].id)
     {
@@ -234,10 +220,12 @@ console.log("angle",angle);
           case "move10":
             steps=10;
           if(flag){
-            
-                let xx=steps*Math.cos(rotation);
-                let yy=steps*Math.sin(rotation);
-                catSprite.style.transform=`rotate(${rotation}deg) translate(${relativePositionX+xx}px,${relativePositionY+yy}px) `;
+           
+                let xx=steps*Math.cos(rotation*Math.PI/180);
+                let yy=steps*Math.sin(rotation*Math.PI/180);
+                x=x+xx;
+                y=y+yy;
+                catSprite.style.transform=`rotate(${rotation}deg) translate(${x}px,${y}px) `;
                 catSprite.style.position="absolute";
           }
             break;
@@ -246,8 +234,10 @@ console.log("angle",angle);
               angle=-15;
               if(flag)
               {
-            if(steps!=10){relativePositionX=0,relativePositionY=0}
-              catSprite.style.transform=` translate(${relativePositionX}px,${relativePositionY}px) rotate(${rotation+angle}deg)`
+
+             rotation=rotation+angle;
+       
+              catSprite.style.transform=` translate(${x}px,${y}px) rotate(${rotation}deg)`
               catSprite.style.position="absolute";
               }
               break;
@@ -256,9 +246,8 @@ console.log("angle",angle);
                 angle=15;
                 if(flag)
                 {
-
-            if(steps!=10){relativePositionX=0,relativePositionY=0}
-                catSprite.style.transform=`translate(${relativePositionX}px,${relativePositionY}px) rotate(${rotation+angle}deg) `
+                  rotation=rotation+angle;
+                catSprite.style.transform=`translate(${x}px,${y}px) rotate(${rotation}deg) `
                 catSprite.style.position="absolute";
                 }
                 break;
